@@ -1,0 +1,30 @@
+.btnQuantityPlus {
+    border: none;
+    border-radius: 30px 0px 0px 30px;
+    padding: 5px 14px;
+    background-color: rgba(0, 0, 0, 0.09);
+    font-size: large;
+}
+
+
+.btnQuantityMinus {
+    border: none;
+    border-radius: 0px 30px 30px 0px;
+    padding: 5px 14px;
+    background-color: rgba(0, 0, 0, 0.09);
+    font-size: large;
+}
+
+
+.addingtocart {
+    &:hover {   
+        color: white !important;
+        background-color: rgb(203, 150, 28) !important;
+    }
+}
+.buydirectly {
+    &:hover {   
+        color: white !important;
+        background-color: rgb(165, 37, 37) !important;
+    }
+}

@@ -1,0 +1,33 @@
+.billingform {
+    margin: 30px;
+    border: 2px dashed black;
+    border-end-start-radius: 3px;
+    border-end-end-radius: 3px;
+    height: auto;
+
+    .customerinformation {
+        letter-spacing: 2px;
+        margin: 0px 18px;
+        font-size: 25px;
+
+        .customerinformation-cover {
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+
+            div {
+                font-size: 18px;
+            }
+        }
+    }
+}
+
+.customerinformation-cover {
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+
+    div {
+        font-size: 18px;
+    }
+}
