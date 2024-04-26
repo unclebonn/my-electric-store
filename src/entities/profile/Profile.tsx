@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Divider, Form, Image, Input, List, Modal, Row, Select, Skeleton, Tabs, TabsProps, Tag } from "antd"
+import { Button, Col, DatePicker, Divider, Form, Image, Input, List, Modal, Row, Select, Skeleton, Table, TableProps, Tabs, TabsProps, Tag } from "antd"
 import React, { useEffect, useState } from "react"
 import Cookies from "universal-cookie"
 import { IAccountProps } from "../../shared/reducer/authentication.reducer";
@@ -20,6 +20,19 @@ export interface UpdateProfileProps {
     dateOfBirth: string,
     gender: string,
 
+}
+
+
+
+interface OrderDetail {
+    expiredWarranty: string,
+    price: number,
+    quantity: number,
+    product: {
+        id: number,
+        imageUrl: string,
+        name: string
+    }
 }
 const Profile: React.FC = () => {
 
@@ -66,7 +79,45 @@ const Profile: React.FC = () => {
         setIsPopup(true)
     }
 
+
     console.log(orderDetail);
+    
+
+    const columnDetail: TableProps<OrderDetail>['columns'] = [
+        {
+            title: 'Thời gian bảo hành',
+            dataIndex: 'expiredWarranty',
+            key: 'expiredWarranty',
+            render(value, record, index) {
+                return <span>{formatDate(value)}</span>
+            },
+        },
+        {
+            title: 'Sản phẩm',
+            dataIndex: 'product',
+            key: 'product',
+            render(value, record, index) {
+                return (
+                    <div>{record.product.name}</div>
+                )
+            },
+        },
+        {
+            title: 'Giá tiền',
+            key: 'price',
+            dataIndex: 'price',
+            render(value, record, index) {
+                return <span>{formatCurrencyVN(value)}</span>
+            },
+        },
+        {
+            title: 'Số lượng',
+            key: 'quantity',
+            dataIndex: 'quantity',
+
+        },
+
+    ];
 
 
 
@@ -200,7 +251,8 @@ const Profile: React.FC = () => {
                                     </Row>
                                 </Col>
                                 <Col span={24} style={{ textAlign: "right" }}>
-                                    <h3>Tổng tiền: {formatCurrencyVN(item.totalPrice)}</h3>
+                                    <h3>Tổng tiền: <span style={{color:"red"}}>{formatCurrencyVN(item.totalPrice)}</span></h3>
+                                    
                                 </Col>
 
 
@@ -219,29 +271,7 @@ const Profile: React.FC = () => {
 
         <>
             <Modal footer={<></>} width={900} title="Chi tiết đơn hàng" open={ispopup} onCancel={() => setIsPopup(!ispopup)}>
-                <Row gutter={[20, 0]}>
-                    {orderDetail != null ?
-                        orderDetail.data.map((product: any) => {
-                            return (
-                                <>
-                                    <Col span={7}>
-                                        {product.product.name}
-                                    </Col>
-                                    <Col span={5}>
-                                        Số lượng: {product.quantity}
-                                    </Col>
-                                    <Col span={5}>
-                                        Giá tiền: {formatCurrencyVN(product.price)}
-                                    </Col>
-                                    <Col span={7}>
-                                        Thời gian bảo hành: {formatDate(product.expiredWarranty)}
-                                    </Col>
-                                    <Divider type="horizontal" style={{ borderColor: "black" }} />
-                                </>
-                            )
-                        })
-                        : <></>}
-                </Row>
+                <Table pagination={false} columns={columnDetail} dataSource={orderDetail?.data} />
             </Modal>
             <Row style={{ margin: "50px" }}>
                 <Col md={24}>

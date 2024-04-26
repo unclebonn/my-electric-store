@@ -47,7 +47,7 @@ export const Cart: React.FC<CartProps> = (props) => {
                 />
 
                 <div style={{ textAlign: "right" }}>
-                    <h3 style={{ marginRight: "30px" }}>Tổng tiền {formatCurrencyVN(Number(calculateTotalPrice()))}</h3>
+                    <h3 style={{ marginRight: "30px" }}>Tổng tiền <span style={{color:"red"}}>{formatCurrencyVN(Number(calculateTotalPrice()))}</span></h3>
                 </div>
 
                 <Row style={{ margin: "30px" }}>

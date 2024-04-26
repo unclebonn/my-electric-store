@@ -31,7 +31,7 @@ const CartDetail: React.FC<CartDetailProps> = (props) => {
 
     const dispatch = useAppDispatch()
 
-     const descriptionStyle: React.CSSProperties = {
+    const descriptionStyle: React.CSSProperties = {
         overflow: "hidden",
         display: "-webkit-box",
         textOverflow: "ellipsis",
@@ -91,11 +91,19 @@ const CartDetail: React.FC<CartDetailProps> = (props) => {
                         {productName}
                     </div>}
                     description={
-                        <div style={descriptionStyle}>
-                            {formatCurrencyVN(price)}
+                        <div>
+                            <div style={descriptionStyle}>
+                                {formatCurrencyVN(price)}
+                            </div>
+                            <div style={{ color: "black", display: "flex", justifyContent: "space-between" }}>
+                                <div>Thành tiền </div>
+                                <div>{formatCurrencyVN(quantity * price)}</div>
+                            </div>
                         </div>
                     }
-                />
+                >
+
+                </List.Item.Meta>
 
             </List.Item>
         </>

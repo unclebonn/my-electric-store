@@ -66,9 +66,6 @@ const Order: React.FC<OrderProps> = (props) => {
                 </Row>
                 :
                 <Row gutter={[20, 0]}>
-                    <Col md={14}>
-                        <BillingInformation detailincart={data} totalPrice={calculateTotalPrice()} />
-                    </Col>
                     <Col style={{ marginTop: "30px" }} md={10}>
                         <Row style={{ height: "auto" }}>
                             <Col span={24}>
@@ -84,6 +81,9 @@ const Order: React.FC<OrderProps> = (props) => {
 
                             </Col>
                         </Row>
+                    </Col>
+                    <Col md={14}>
+                        <BillingInformation detailincart={data} totalPrice={calculateTotalPrice()} />
                     </Col>
                 </Row>
 
