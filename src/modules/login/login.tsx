@@ -60,7 +60,6 @@ const Login: React.FC = () => {
                         <p>Vui lòng nhập thông tin đăng nhập/đăng ký của bạn!</p>
                     </Col>
                 </Row>
-                {loginError ? <p style={{ color: "red" }}>Tài khoản hoặc mật khẩu sai</p> : <></>}
                 <Row style={{ margin: "10px 0px" }}>
                     <Col md={24}>
                         {

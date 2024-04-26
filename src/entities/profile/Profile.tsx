@@ -273,7 +273,7 @@ const Profile: React.FC = () => {
             <Modal footer={<></>} width={900} title="Chi tiết đơn hàng" open={ispopup} onCancel={() => setIsPopup(!ispopup)}>
                 <Table pagination={false} columns={columnDetail} dataSource={orderDetail?.data} />
             </Modal>
-            <Row style={{ margin: "50px" }}>
+            <Row style={{ margin: "50px", marginTop:100 }}>
                 <Col md={24}>
                     <Tabs
                         defaultActiveKey="2"

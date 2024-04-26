@@ -4,7 +4,6 @@ import { Button, Checkbox, Col, Divider, Form, GetProp, Input, Row, Tabs, TabsPr
 import Cookies from "universal-cookie"
 import { IAccountProps } from "../../../../shared/reducer/authentication.reducer"
 import { formatCurrencyVN } from "../../../../shared/utils/formatCurrency"
-import { getDateTodayVN } from "../../../../shared/utils/date/formatDate"
 import dayjs from "dayjs"
 import { ExtraInformation, IOrderProps } from "../../../../shared/models/order"
 import { ICartDetail } from "../../../cart/components/cartdetail"

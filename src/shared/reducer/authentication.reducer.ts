@@ -6,6 +6,7 @@ import Cookies from "universal-cookie"
 import { useNavigate } from "react-router-dom"
 import { AUTH } from "../models/auth.api.ts/authapi"
 import { url } from "../utils/constant"
+import { toast } from "react-toastify"
 
 
 export interface IAccountProps {
@@ -39,23 +40,31 @@ export const authenticate = createAsyncThunk("authentication/login", async (auth
 
 export const login: (username: string, password: string) => AppThunk = (email: string, password: string) => async dispatch => {
     const cookie = new Cookies()
-    const result = await dispatch(authenticate({ email, password }));
-    const response = result.payload as AxiosResponse
-    // const jwt_token = response.data.tokenString
-    // const expiration = response.data.expiration
-    const jwt_token = response.data.data.tokenString //deploy
-    const expiration = response.data.data?.expiration // deploy
 
-    if (jwt_token && expiration) {
-        cookie.set("jwt-token", jwt_token, {
-            expires: new Date(expiration),
-            path: "/"
-        })
+    try {
+        const result = await dispatch(authenticate({ email, password }));
+        const response = result.payload as AxiosResponse
+        // const jwt_token = response.data.tokenString
+        // const expiration = response.data.expiration
+        const jwt_token = response.data.data.tokenString //deploy
+        const expiration = response.data.data?.expiration // deploy
 
-        const account = await dispatch(getAccount(jwt_token));
-        const response = account.payload as AxiosResponse
-        cookie.set("account", response.data, { path: "/" })
+        if (jwt_token && expiration) {
+            cookie.set("jwt-token", jwt_token, {
+                expires: new Date(expiration),
+                path: "/"
+            })
+
+            const account = await dispatch(getAccount(jwt_token));
+            const response = account.payload as AxiosResponse
+            cookie.set("account", response.data, { path: "/" })
+        }
+
+    } catch (error) {
+        toast.error("Đăng nhập thất bại")
+        
     }
+
 
 }
 
