@@ -16,6 +16,7 @@ import { FloatButton, Popover } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Cart } from './entities/cart/Cart';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
 
 function App() {
 
@@ -23,6 +24,9 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <Helmet>
+          <title>Electric Store</title>
+        </Helmet>
         <ToastContainer position="top-right" autoClose={1500} closeButton={true} limit={3} newestOnTop />
         <Routes>
           <Route path='/login' element={<Login />} />
