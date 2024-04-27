@@ -80,8 +80,6 @@ const Profile: React.FC = () => {
     }
 
 
-    console.log(orderDetail);
-
 
     const columnDetail: TableProps<OrderDetail>['columns'] = [
         {
