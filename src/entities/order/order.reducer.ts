@@ -5,6 +5,7 @@ import Order from "./Order";
 import { ORDER } from "./order.api";
 import axios from "axios";
 import { url } from "../../shared/utils/constant";
+import Cookies from "universal-cookie";
 
 
 
@@ -26,6 +27,10 @@ export const initialState: EntityState<IOrderProps> = {
     message: "",
     updateSuccess: false
 }
+
+const cookie = new Cookies()
+const account = cookie.get("account")
+const id = account.id
 
 
 
@@ -61,7 +66,11 @@ export const checkpayment = createAsyncThunk("order/checkpayment", async (paymen
     const requestUrl = await axios.post(`${url}/Payment/vn-pay/check-payment`, paymentinfo);
     return requestUrl
 })
-
+export const updateStatusOrdeCancel = createAsyncThunk("order/updatestatusorder", async ({ accountid, orderid }: { accountid: number, orderid: number }, thunkapi) => {
+    const requestUrl = await axios.put(`${url}/Order/updateStatus/${orderid}/3`)
+    thunkapi.dispatch(getHistoryOrder(accountid))
+    return requestUrl
+})
 
 
 
@@ -93,7 +102,7 @@ export const OrderSLice = createSlice({
             })
 
 
-            .addMatcher(isPending(getPaymentVnpay, checkpayment, getHistoryOrder, getOrderDetail), (state, action) => {
+            .addMatcher(isPending(getPaymentVnpay, checkpayment, getHistoryOrder, getOrderDetail, updateStatusOrdeCancel), (state, action) => {
                 return {
                     ...state,
                     loading: true,
@@ -128,6 +137,13 @@ export const OrderSLice = createSlice({
                     ...state,
                     loading: false,
                     message: "Thanh toán thành công xin cảm ơn"
+                }
+            })
+            .addMatcher(isFulfilled(updateStatusOrdeCancel), (state, action) => {
+                return {
+                    ...state,
+                    loading: false,
+                    message: "Cập nhật thành công"
                 }
             })
     },

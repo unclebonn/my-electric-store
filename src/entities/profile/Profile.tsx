@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import { useAppDispatch, useAppSelector } from "../../config/store";
 import { getProfile, reset, updateProfile } from "./profile.reducer";
 import { toast } from "react-toastify";
-import { getHistoryOrder, getOrderDetail } from "../order/order.reducer";
+import { getHistoryOrder, getOrderDetail, updateStatusOrdeCancel } from "../order/order.reducer";
 import { formatCurrencyVN } from "../../shared/utils/formatCurrency";
 import 'dayjs/locale/vi';
 import "./profile.scss"
@@ -81,7 +81,7 @@ const Profile: React.FC = () => {
 
 
     console.log(orderDetail);
-    
+
 
     const columnDetail: TableProps<OrderDetail>['columns'] = [
         {
@@ -118,6 +118,11 @@ const Profile: React.FC = () => {
         },
 
     ];
+
+    const updateStatusCancel = (orderid: number) => {
+        dispatch(updateStatusOrdeCancel({ accountid: account.id, orderid }))
+        toast.success("Huỷ đơn hàng thành công")
+    }
 
 
 
@@ -221,43 +226,50 @@ const Profile: React.FC = () => {
                 bordered
                 dataSource={orders}
                 renderItem={(item: any, index: number) =>
-                    <div onClick={() => getorderdetail(item.orderId)} className="listItem" style={index % 2 == 0 ? { backgroundColor: "rgba(0,0,0,0.04)" } : { backgroundColor: "white" }}>
-                        <List.Item style={{ cursor: "pointer", display: "block" }}>
-                            <Row>
-                                <Col span={24} style={{ textAlign: "right" }}>
-                                    {item.status == 1 ? <Tag color="blue">Thành công</Tag> : <Tag color="yellow">Đang xử lý</Tag>}
-                                </Col>
-                                <Col span={24}>
-                                    <Row style={{ justifyContent: "space-between" }}>
-                                        <Col span={12} >
-                                            Mã đơn hàng: {item.orderId}
-                                        </Col>
-                                        <Col span={12}>
-                                            {formatDate(item.orderDate)}
-                                            {/* {dayjs(item.orderDate).locale('vi').format('dddd, DD/MM/YYYY HH:mm:ss').toLocaleUpperCase()} */}
-                                        </Col>
+                    <div style={index % 2 == 0 ? { backgroundColor: "rgba(0,0,0,0.04)" } : { backgroundColor: "white" }}>
+                        <div onClick={() => getorderdetail(item.orderId)} className="listItem" >
+                            <List.Item style={{ cursor: "pointer", display: "block" }}>
+                                <Row>
+                                    <Col span={24} style={{ textAlign: "right" }}>
+                                        {item.status == 1 ? <Tag color="blue">Thành công</Tag> : item.status == 2 ? <Tag color="yellow">Đang xử lý</Tag> : <Tag color="red">Đã huỷ</Tag>}
+                                    </Col>
+                                    <Col span={24}>
+                                        <Row style={{ justifyContent: "space-between" }}>
+                                            <Col span={12} >
+                                                Mã đơn hàng: {item.orderId}
+                                            </Col>
+                                            <Col span={12}>
+                                                {formatDate(item.orderDate)}
+                                                {/* {dayjs(item.orderDate).locale('vi').format('dddd, DD/MM/YYYY HH:mm:ss').toLocaleUpperCase()} */}
+                                            </Col>
 
-                                    </Row>
-                                </Col>
-                                <Col span={24}>
-                                    <Row>
-                                        Tên khách hàng: {item.nameCustomer}
-                                    </Row>
-                                    <Row>
-                                        Địa chỉ: {item.addressCustomer}
-                                    </Row>
-                                    <Row>
-                                        Số điện thoại: {item.phoneCustomer}
-                                    </Row>
-                                </Col>
-                                <Col span={24} style={{ textAlign: "right" }}>
-                                    <h3>Tổng tiền: <span style={{color:"red"}}>{formatCurrencyVN(item.totalPrice)}</span></h3>
-                                    
-                                </Col>
+                                        </Row>
+                                    </Col>
+                                    <Col span={24}>
+                                        <Row>
+                                            Tên khách hàng: {item.nameCustomer}
+                                        </Row>
+                                        <Row>
+                                            Địa chỉ: {item.addressCustomer}
+                                        </Row>
+                                        <Row>
+                                            Số điện thoại: {item.phoneCustomer}
+                                        </Row>
+                                    </Col>
+
+                                    <Col span={24} style={{ textAlign: "right" }}>
+                                        <h3>Tổng tiền: <span style={{ color: "red" }}>{formatCurrencyVN(item.totalPrice)}</span></h3>
+
+                                    </Col>
 
 
-                            </Row>
-                        </List.Item>
+                                </Row>
+                            </List.Item>
+                        </div>
+                        <Col span={24} style={{ textAlign: "right" }}>
+                            {item.status == 2 ? <Button onClick={() => updateStatusCancel(item.orderId)} style={{ backgroundColor: "red", color: "white" }} type="default">Huỷ đơn</Button> : <></>}
+
+                        </Col>
                     </div>
 
 
@@ -273,7 +285,7 @@ const Profile: React.FC = () => {
             <Modal footer={<></>} width={900} title="Chi tiết đơn hàng" open={ispopup} onCancel={() => setIsPopup(!ispopup)}>
                 <Table pagination={false} columns={columnDetail} dataSource={orderDetail?.data} />
             </Modal>
-            <Row style={{ margin: "50px", marginTop:100 }}>
+            <Row style={{ margin: "50px", marginTop: 100 }}>
                 <Col md={24}>
                     <Tabs
                         defaultActiveKey="2"
