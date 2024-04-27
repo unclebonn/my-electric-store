@@ -28,9 +28,7 @@ export const initialState: EntityState<IOrderProps> = {
     updateSuccess: false
 }
 
-const cookie = new Cookies()
-const account = cookie.get("account")
-const id = account.id
+
 
 
 
