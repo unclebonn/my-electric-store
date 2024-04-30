@@ -157,18 +157,38 @@ const ProductDetail: React.FC = () => {
                             </Col>
                             <Col md={24} style={{ marginTop: "40px" }}>
                                 <Row gutter={[20, 0]} style={{ textAlign: "center" }}>
-                                    <Col md={12}>
-                                        <Button className="addingtocart" onClick={() => onClickBuy()} style={{ height: "70px", backgroundColor: "orange", color: "white" }} shape="round" size="large">
-                                            <h4>THÊM VÀO GIỎ HÀNG</h4>
-                                            <p style={{ fontSize: "13px" }}>Giao hàng thu tiền tận nơi</p>
-                                        </Button>
-                                    </Col>
-                                    <Col md={12}>
-                                        <Button className="buydirectly" style={{ height: "70px", backgroundColor: "red", color: "white" }} shape="round" size="large">
-                                            <h4>MUA ONLINE NGAY</h4>
-                                            <p style={{ fontSize: "13px" }}>Thủ tục online đơn giản</p>
-                                        </Button>
-                                    </Col>
+                                    {productdetail?.data.products.quantity > 0 ?
+                                        <>
+                                            <Col md={12}>
+                                                <Button className="addingtocart" onClick={() => onClickBuy()} style={{ height: "70px", backgroundColor: "orange", color: "white" }} shape="round" size="large">
+                                                    <h4>THÊM VÀO GIỎ HÀNG</h4>
+                                                    <p style={{ fontSize: "13px" }}>Giao hàng thu tiền tận nơi</p>
+                                                </Button>
+                                            </Col>
+                                            <Col md={12}>
+                                                <Button className="buydirectly" style={{ height: "70px", backgroundColor: "red", color: "white" }} shape="round" size="large">
+                                                    <h4>MUA ONLINE NGAY</h4>
+                                                    <p style={{ fontSize: "13px" }}>Thủ tục online đơn giản</p>
+                                                </Button>
+                                            </Col>
+                                        </>
+                                        :
+                                        <>
+                                            <Col md={12}>
+                                                <Button disabled className="addingtocart" style={{ height: "70px", backgroundColor: "grey", color: "white" }} shape="round" size="large">
+                                                    <h4>THÊM VÀO GIỎ HÀNG</h4>
+                                                    <p style={{ fontSize: "13px" }}>Giao hàng thu tiền tận nơi</p>
+                                                </Button>
+                                            </Col>
+                                            <Col md={12}>
+                                                <Button disabled className="buydirectly" style={{ height: "70px", backgroundColor: "grey", color: "white" }} shape="round" size="large">
+                                                    <h4>MUA ONLINE NGAY</h4>
+                                                    <p style={{ fontSize: "13px" }}>Thủ tục online đơn giản</p>
+                                                </Button>
+                                            </Col>
+                                        </>
+                                    }
+
                                 </Row>
                             </Col>
                             <Col md={24} style={{ marginTop: "40px" }}>

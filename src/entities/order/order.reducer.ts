@@ -1,11 +1,12 @@
-import { createAsyncThunk, createSlice, isFulfilled, isPending } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit";
 import { EntityState } from "../../shared/utils/reducer.utils";
 import { IOrderProps } from "../../shared/models/order";
 import Order from "./Order";
 import { ORDER } from "./order.api";
-import axios from "axios";
+import axios, { isCancel } from "axios";
 import { url } from "../../shared/utils/constant";
 import Cookies from "universal-cookie";
+import { toast } from "react-toastify";
 
 
 
@@ -78,7 +79,11 @@ export const OrderSLice = createSlice({
     name: "order",
     initialState: initialState as OrderState,
     reducers: {
-
+        reset() {
+            return {
+                ...initialState
+            }
+        }
     },
     extraReducers(builder) {
         builder.
@@ -91,11 +96,12 @@ export const OrderSLice = createSlice({
                 }
             })
 
-            .addMatcher(isFulfilled(createsubmitpayment), (state, action) => {
+            .addMatcher(isRejected(createsubmitpayment), (state, action) => {
+                toast.error("Số lượng sản phẩm không đủ xin vui lòng mua món khác")
                 return {
                     ...state,
                     loading: false,
-                    message: "Mua hàng thành công. Xin cảm ơn"
+                    message: "Số lượng sản phẩm không đủ xin vui lòng mua món khác"
                 }
             })
 
@@ -144,8 +150,17 @@ export const OrderSLice = createSlice({
                     message: "Cập nhật thành công"
                 }
             })
+
+            
+            .addMatcher(isFulfilled(createsubmitpayment), (state, action) => {
+                return {
+                    ...state,
+                    loading: false,
+                    message: "Mua hàng thành công. Xin cảm ơn"
+                }
+            })
     },
 })
 
-
+export const { reset } = OrderSLice.actions
 export default OrderSLice.reducer

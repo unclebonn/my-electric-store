@@ -229,6 +229,7 @@ const Profile: React.FC = () => {
                             <List.Item style={{ cursor: "pointer", display: "block" }}>
                                 <Row>
                                     <Col span={24} style={{ textAlign: "right" }}>
+                                    {item.paymentName == "tienmat" ? <Tag color="blue">Tiền mặt</Tag> : item.paymentName == "qrcode" ? <Tag color="blue">QR Code</Tag> : <Tag color="blue">VN Pay</Tag>}
                                         {item.status == 1 ? <Tag color="blue">Thành công</Tag> : item.status == 2 ? <Tag color="yellow">Đang xử lý</Tag> : <Tag color="red">Đã huỷ</Tag>}
                                     </Col>
                                     <Col span={24}>

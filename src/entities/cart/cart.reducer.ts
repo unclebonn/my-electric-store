@@ -50,7 +50,13 @@ export const updateQuantityProduct = createAsyncThunk("cart/updatequantityproduc
 export const CartSlice = createSlice({
     name: "cart",
     initialState: initialState as CartState,
-    reducers: {},
+    reducers: {
+        reset() {
+            return {
+                ...initialState
+            }
+        }
+    },
     extraReducers(builder) {
         builder.
             addMatcher(isPending(createProductToCart, getCartByUserId, deleteAllProductInCart, deleteProductInCart, updateQuantityProduct), (state, action) => {
@@ -89,6 +95,9 @@ export const CartSlice = createSlice({
     },
 })
 
+
+
+export const { reset } = CartSlice.actions
 
 export default CartSlice.reducer
 
