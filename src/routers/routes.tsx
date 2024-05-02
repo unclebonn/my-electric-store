@@ -37,9 +37,6 @@ const AppRoutes = () => {
         dispatch(deleteAllProductInCart(account.id))
     }
 
-    console.log(productsInCart.data.length);
-        
-    
     return (
         <>
             <Header />
