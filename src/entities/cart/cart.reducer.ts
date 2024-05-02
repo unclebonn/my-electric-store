@@ -1,8 +1,9 @@
-import { createAsyncThunk, createSlice, isFulfilled, isPending } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit";
 import { EntityState } from "../../shared/utils/reducer.utils";
 import { IAddingCartProps, IDeleteProductProps, IUpdateQuantityProps } from "../../shared/models/cart";
 import { CART } from "./cart.api";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const initialState: EntityState<any> = {
     data: null,
@@ -84,10 +85,20 @@ export const CartSlice = createSlice({
             })
             .addMatcher(isFulfilled(createProductToCart), (state, action) => {
                 const { data } = action.payload
+                toast.success("Thêm vào giỏ hàng thành công")
+
                 return {
                     ...state,
                     loading: false,
                     data: data
+                }
+            })
+
+            .addMatcher(isRejected(updateQuantityProduct, createProductToCart), (state, action) => {
+                toast.error("Số lượng sản phẩm còn lại không đủ. Xin vui lòng đợi có hàng !")
+                return {
+                    ...state,
+                    loading: false
                 }
             })
 

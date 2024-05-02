@@ -49,7 +49,11 @@ const ProductDetail: React.FC = () => {
 
 
     const plusQuantity = () => {
-        setQuantity((quantity) => quantity + 1)
+        if (productdetail?.data.products.quantity <= quantity) {
+
+        } else {
+            setQuantity((quantity) => quantity + 1)
+        }
     }
     const minusQuantity = () => {
         if (quantity === 1) {
@@ -93,7 +97,6 @@ const ProductDetail: React.FC = () => {
                 quantity: quantity,
                 userId: account.id
             }
-            toast.success("Thêm vào giỏ hàng thành công")
             dispatch(createProductToCart(product_add_to_cart))
         }
 
@@ -159,7 +162,7 @@ const ProductDetail: React.FC = () => {
                                 <p>Mã sản phẩm: <span style={{ color: "red" }}><strong>{productdetail?.data?.products.id}</strong> </span></p>
                             </Col>
                             <Col md={12}>
-                                <p>Tình trạng: <span style={{ color: "red" }}><strong>{productdetail?.data.products.quantity > 0 ? "Còn hàng" : "Hết hàng"} </strong></span></p>
+                                <p>Số lượng còn lại: <span style={{ color: "red" }}><strong>{productdetail?.data.products.quantity > 0 ? productdetail?.data.products.quantity : 0} </strong></span></p>
                             </Col>
                             <Col md={24} style={{ marginTop: "10px" }}>
                                 <p>Giá tiền: <span style={{ color: "red" }}><strong>{formatCurrencyVN(Number(productdetail?.data?.products.price))}</strong></span></p>
@@ -170,7 +173,7 @@ const ProductDetail: React.FC = () => {
                                     <Row style={{ border: "1px solid grey", borderRadius: "30px" }}>
                                         <button className="btnQuantityPlus" onClick={() => minusQuantity()}>-</button>
                                         <span style={{ display: "inline-block", width: "50px", textAlign: "center", margin: "auto 0" }}>{quantity}</span>
-                                        <button className="btnQuantityMinus" onClick={() => plusQuantity()}>+</button>
+                                        <button disabled={productdetail?.data.products.quantity <= quantity} className="btnQuantityMinus" onClick={() => plusQuantity()}>+</button>
                                     </Row>
 
                                 </Row>
