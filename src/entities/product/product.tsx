@@ -109,7 +109,6 @@ export const Product: React.FC = () => {
                 quantity: 1,
                 userId: account.id
             }
-            toast.success("Thêm vào giỏ hàng thành công")
             dispatch(createProductToCart(data))
         }
 
