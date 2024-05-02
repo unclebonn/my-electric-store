@@ -80,7 +80,7 @@ const AppRoutes = () => {
                     icon={
                         <>
                             <div className="icon">
-                                <div className="circle-quantity">{productsInCart.data ? productsInCart.data.length : 0}</div>
+                                <div className="circle-quantity">{productsInCart?.data ? productsInCart?.data.length : 0}</div>
                             </div>
                             <ShoppingCartOutlined />
                         </>
