@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 
 import EditorContent from "../../shared/ckeditor/components/Editor";
 import axios from "axios";
-import { Button, Col, Divider, Image, Row, Skeleton, Table, TableProps, Typography } from "antd";
+import { Avatar, Button, Carousel, Col, Divider, Form, Image, Input, List, Rate, Row, Skeleton, Table, TableProps, Typography } from "antd";
 import { formatCurrencyVN } from "../../shared/utils/formatCurrency";
 import "./productdetail.scss"
 import { CarTwoTone, GoldTwoTone, HeartTwoTone, PhoneTwoTone } from "@ant-design/icons";
@@ -15,6 +15,7 @@ import Cookies from "universal-cookie";
 import { IAccountProps } from "../../shared/reducer/authentication.reducer";
 import { createProductToCart } from "../cart/cart.reducer";
 import { toast } from "react-toastify";
+import { ReviewProps, createReview, getReviewProduct } from "../reviews/review.reducer";
 
 interface DataType {
     key: string;
@@ -34,11 +35,16 @@ const ProductDetail: React.FC = () => {
     const cookie = new Cookies();
     const account = cookie.get("account") as IAccountProps;
 
+    const review = useAppSelector(state => state.review.data) as ReviewProps[]
+
     const navigate = useNavigate()
 
+    const [start, setStart] = useState(5);
+    const [form] = Form.useForm();
 
     useEffect(() => {
         dispatch(getProductDetail(id))
+        dispatch(getReviewProduct(id))
     }, [])
 
 
@@ -93,23 +99,29 @@ const ProductDetail: React.FC = () => {
 
     }
 
+    const onReview = (formSubmit: ReviewProps) => {
 
-    const addProductToCart = (productid: number | string) => {
-        if (account == null) {
-            navigate("/login")
-            toast("Vui lòng đăng nhập để mua hàng")
-        } else {
-            const data = {
-                productId: productid,
-                quantity: 1,
-                userId: account.id
-            }
-            toast.success("Thêm vào giỏ hàng thành công")
-            dispatch(createProductToCart(data))
+        const formReview =
+        {
+            "userId": account.id,
+            "productId": id,
+            "comment": formSubmit.comment,
+            "rating": start
         }
+        form.resetFields();
+        dispatch(createReview(formReview))
 
 
     }
+
+
+    const onChangeStart = (numbofstart: number) => {
+        setStart(numbofstart)
+    }
+
+
+
+
 
     return (
         <Row style={{ marginTop: "30px" }} gutter={[30, 10]}>
@@ -119,13 +131,21 @@ const ProductDetail: React.FC = () => {
                     {/* Image part */}
                     <Col md={11}>
                         <Row style={{ width: "100%" }}>
-                            <Image
-                                alt="ảnh sản phẩm"
-                                style={{ objectFit: "contain" }}
-                                height={"500px"}
-                                width={"100%"}
-                                src={productdetail?.data?.images[0]?.url ?? "/assets/imagebroke.png"}
-                            />
+                            <Col span={24}>
+                                <Carousel style={{ width: "100%" }} autoplay>
+                                    {productdetail?.data?.images?.map((image) => {
+                                        return (
+                                            <Image
+                                                alt="ảnh sản phẩm"
+                                                style={{ objectFit: "contain" }}
+                                                height={"500px"}
+                                                width={"100%"}
+                                                src={image.url ?? "/assets/imagebroke.png"}
+                                            />
+                                        )
+                                    })}
+                                </Carousel>
+                            </Col>
                         </Row>
                     </Col>
                     {/* Add to cart part */}
@@ -248,12 +268,60 @@ const ProductDetail: React.FC = () => {
                     <Col md={24} style={{ marginTop: "20px" }}>
                         <Row>
                             <Col span={24}>
-                                <Row gutter={[20, 0]}>
+                                <Row gutter={[30, 0]}>
                                     <Col span={16} style={{ textAlign: "left" }}>
-                                        <h2>Mô tả sản phẩm</h2>
-                                        <p>
-                                            {productdetail?.data?.products.description}
-                                        </p>
+                                        <Row gutter={[20, 40]}>
+                                            <Col span={24}>
+                                                <h2>Mô tả sản phẩm</h2>
+                                                <p>
+                                                    {productdetail?.data?.products.description}
+                                                </p>
+                                            </Col>
+                                            <Col span={24}>
+                                                <h2>Đánh giá</h2>
+                                                <Form form={form} onFinish={onReview} style={{ border: "1px solid rgba(0,0,0,0.9)", padding: 10, borderRadius: 10 }}>
+                                                    <div
+                                                        style={{ margin: 10, textAlign: "right" }}
+                                                    >
+                                                        <Rate onChange={onChangeStart} disabled={account != null ? false : true} defaultValue={5} />
+                                                    </div>
+                                                    <Form.Item
+                                                        name="comment"
+                                                        rules={[{
+                                                            required: true,
+                                                            message: "Vui lòng nhập trường này"
+                                                        }]}
+                                                    >
+                                                        <Input.TextArea disabled={account != null ? false : true} placeholder="Đánh giá ở đây nhé !" name="comment" />
+                                                    </Form.Item>
+                                                    <div style={{ margin: 10, textAlign: "right" }}>
+                                                        {account != null ? <Button htmlType="submit">Đánh giá</Button> : <p>Đăng nhập để đánh giá nhé</p>}
+                                                    </div>
+                                                </Form>
+                                            </Col>
+                                            <Col span={24}>
+                                                <List
+                                                    style={{ maxHeight: 400, overflowY: "scroll" }}
+                                                    itemLayout="horizontal"
+                                                    dataSource={review != null ? review : []}
+                                                    renderItem={(item, index) => (
+                                                        <List.Item>
+                                                            <List.Item.Meta
+                                                                avatar={<Avatar src={item.imageUrl} />}
+                                                                title={
+                                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                        <span style={{ fontSize: 14, fontWeight: "bold" }}>{item.nameUser}</span>
+                                                                        <Rate disabled defaultValue={item.rating} />
+                                                                    </div>
+                                                                }
+                                                                description={item.comment}
+                                                            />
+                                                        </List.Item>
+                                                    )}
+                                                />
+
+                                            </Col>
+                                        </Row>
                                     </Col>
                                     <Col span={8}>
                                         <Table bordered={true} columns={columns} dataSource={data} pagination={false}></Table>
@@ -265,7 +333,7 @@ const ProductDetail: React.FC = () => {
                     </Col>
                 </>
             }
-        </Row>
+        </Row >
     )
 }
 

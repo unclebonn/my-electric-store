@@ -37,6 +37,9 @@ const AppRoutes = () => {
         dispatch(deleteAllProductInCart(account.id))
     }
 
+    console.log(productsInCart.data.length);
+        
+    
     return (
         <>
             <Header />
@@ -73,10 +76,20 @@ const AppRoutes = () => {
                 </Row>}
                 content={account != null ? <Cart accountId={account?.id} dataCart={productsInCart} isLoading={isLoading} /> : <CartWithoutLogin />}
             >
+
                 <FloatButton
+                    style={{ height: "50px", width: "50px" }}
                     onMouseEnter={() => setIsOpenCart(!isOpenCart)}
-                    icon={<ShoppingCartOutlined />}
-                />
+                    icon={
+                        <>
+                            <div className="icon">
+                                <div className="circle-quantity">{productsInCart.data ? productsInCart.data.length : 0}</div>
+                            </div>
+                            <ShoppingCartOutlined />
+                        </>
+                    }
+                >
+                </FloatButton>
             </Popover>
         </>
     )

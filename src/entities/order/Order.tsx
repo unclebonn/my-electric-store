@@ -39,7 +39,8 @@ const Order: React.FC<OrderProps> = (props) => {
             dispatch(deleteAllProductInCart(accountId))
             toast.success("Cảm ơn bạn đã thanh toán thành công")
             // them api vnpay checkpayment vao day nua la xong cook
-            window.history.replaceState({}, "", "https://my-electric-store-kvdd.vercel.app/thanh-toan")
+            // window.history.replaceState({}, "", "http://localhost:3000/thanh-toan") //localhost
+            window.history.replaceState({}, "", "https://my-electric-store-kvdd.vercel.app/thanh-toan") //deploy
         }
     }, [])
 

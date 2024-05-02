@@ -141,10 +141,10 @@ const BillingInformation: React.FC<BillingInformationProps> = (props) => {
     }
 
     console.log(message);
-    
+
 
     useEffect(() => {
-        if (message.includes("Mua hàng thành công. Xin cảm ơn")) {
+        if ((paymentMethod == "tienmat" || paymentMethod == "qrcode") && message.includes("Mua hàng thành công. Xin cảm ơn")) {
             reset()
             toast.success("Mua thành công xin vui lòng đợi nhân viên xác thực nhé")
             dispatch(deleteAllProductInCart(account.id))
