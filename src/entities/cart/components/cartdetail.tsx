@@ -41,11 +41,11 @@ const CartDetail: React.FC<CartDetailProps> = (props) => {
     }
 
     const onClickPlusQuantity = (quantity: number) => {
-        setQuantityProduct((quantityProduct) => {
-            dispatch(updateQuantityProduct({ userId: accountId, productId, quantity: quantityProduct + 1 }))
-            return quantityProduct + 1
-        }
-        )
+        dispatch(updateQuantityProduct({ userId: accountId, productId, quantity: quantity + 1 }))
+        // setQuantityProduct((quantityProduct) => {
+        //     return quantityProduct + 1
+        // }
+        // )
 
     }
 
@@ -60,8 +60,6 @@ const CartDetail: React.FC<CartDetailProps> = (props) => {
 
         } else {
             setQuantityProduct((quantityProduct) => {
-                console.log("testtronghamtru", quantityProduct);
-
                 dispatch(updateQuantityProduct({ userId: accountId, productId, quantity: quantityProduct - 1 }))
                 return quantityProduct - 1
             })
@@ -80,7 +78,7 @@ const CartDetail: React.FC<CartDetailProps> = (props) => {
                     <Row>
                         <MinusCircleOutlined style={{ cursor: "pointer" }} onClick={() => onClickMinusQuantity(quantity)} />
                         <Input unselectable="on" type="text" min={1} value={quantity} style={{ width: "40px", margin: "0px 3px" }} />
-                        <PlusCircleOutlined style={{ cursor: "pointer" }} onClick={() => onClickPlusQuantity(quantity)} />
+                        <PlusCircleOutlined  style={{ cursor: "pointer" }} onClick={() => onClickPlusQuantity(quantity)} />
                     </Row>,
                     <span style={{ color: "red" }} ><DeleteOutlined onClick={() => onClickDeleteProduct(productId)} /></span>]}
             >

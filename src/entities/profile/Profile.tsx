@@ -11,6 +11,7 @@ import { formatCurrencyVN } from "../../shared/utils/formatCurrency";
 import 'dayjs/locale/vi';
 import "./profile.scss"
 import { formatDate } from "../../shared/utils/date/formatDate";
+import utc from 'dayjs/plugin/utc'; // Import plugin UTC
 
 export interface UpdateProfileProps {
     id: number | string,
@@ -36,7 +37,7 @@ interface OrderDetail {
 }
 const Profile: React.FC = () => {
 
-
+    dayjs.extend(utc); // Sử dụng plugin UTC
 
     const cookie = new Cookies();
     const account = cookie.get("account") as IAccountProps
@@ -229,7 +230,7 @@ const Profile: React.FC = () => {
                             <List.Item style={{ cursor: "pointer", display: "block" }}>
                                 <Row>
                                     <Col span={24} style={{ textAlign: "right" }}>
-                                    {item.paymentName == "tienmat" ? <Tag color="blue">Tiền mặt</Tag> : item.paymentName == "qrcode" ? <Tag color="blue">QR Code</Tag> : <Tag color="blue">VN Pay</Tag>}
+                                        {item.paymentName == "tienmat" ? <Tag color="blue">Tiền mặt</Tag> : item.paymentName == "qrcode" ? <Tag color="blue">QR Code</Tag> : <Tag color="blue">VN Pay</Tag>}
                                         {item.status == 1 ? <Tag color="blue">Thành công</Tag> : item.status == 2 ? <Tag color="yellow">Đang xử lý</Tag> : <Tag color="red">Đã huỷ</Tag>}
                                     </Col>
                                     <Col span={24}>
@@ -238,7 +239,7 @@ const Profile: React.FC = () => {
                                                 Mã đơn hàng: {item.orderId}
                                             </Col>
                                             <Col span={12}>
-                                                {formatDate(item.orderDate)}
+                                                {dayjs(formatDate(item.orderDate)).utcOffset('+07:00').add(7,'hours').format("DD/MM/YYYY HH:mm:ss")}
                                                 {/* {dayjs(item.orderDate).locale('vi').format('dddd, DD/MM/YYYY HH:mm:ss').toLocaleUpperCase()} */}
                                             </Col>
 
